@@ -1,0 +1,65 @@
+﻿@page "/"
+@inject IHttpClientFactory ClientFactory
+@inject MauiApp1.Data.ProductService ProductService
+
+<h1>All Products</h1>
+@*<form action="" class="mb-3">
+    <input type="search" placeholder="Search"
+           @bind="Search"
+           @bind:event="oninput"
+           @bind:after="SearchProducts">
+</form>*@
+@* <ul class="list-group">
+    
+        @foreach (var product in products)
+        {
+        <li class="list-group-item"><a href="#">@product.Name</a></li>
+        }
+</ul> *@
+<table class="table table-striped border border-1">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Qty</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in products)
+        {
+            <tr @onclick = "DisplayDetails">
+                <td>@product.Name</td>
+                <td>@product.Price</td>
+                <td>@product.Size</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Product> products = new List<Product>();
+    private string Search { get; set; } = "";
+
+    /*private void SearchProducts()
+    {
+        products = ProductService.GetProducts();
+        products = products.FindAll(p => p.Name.Contains(Search));
+    }*/
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            products = await ProductService.GetProductsAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading products: {ex.Message}");
+            // You can show an error message to the user here as well.
+        }
+    }
+
+    private void DisplayDetails()
+    {
+        Console.WriteLine();
+    }
+}
